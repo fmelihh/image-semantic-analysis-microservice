@@ -36,10 +36,5 @@ func (h *Handler) handleImageUpload(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
-	utils.WriteJSON(w, http.StatusAccepted, map[string]any{
-		"message":       "image was saved",
-		"imageName":     imageMetadata.Name,
-		"imageMimeType": imageMetadata.MimeType,
-		"imageBytes":    imageMetadata.Bytes,
-	})
+	utils.WriteJSON(w, http.StatusAccepted, imageMetadata)
 }

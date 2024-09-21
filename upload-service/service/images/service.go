@@ -1,18 +1,23 @@
 package images
 
 import (
+	"bytes"
+	"context"
 	"io"
 	"mime/multipart"
 	"path/filepath"
 	"strings"
 	"upload-service/types"
+
+	"github.com/minio/minio-go/v7"
 )
 
 type Service struct {
+	minioClient *minio.Client
 }
 
-func NewService() *Service {
-	return &Service{}
+func NewService(minioClient *minio.Client) *Service {
+	return &Service{minioClient: minioClient}
 }
 
 func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.ImageMetadata, error) {
@@ -29,6 +34,10 @@ func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.Im
 		MimeType: h.Header.Get("Content-Type"),
 		Bytes:    fileBytes,
 	}
+
+	ctx := context.Background()
+	imageIOReader := bytes.NewReader(imageMetadata.Bytes)
+	s.minioClient.PutObject(ctx, "image", h.Filename, imageIOReader, h.Size, minio.PutObjectOptions{})
 
 	return imageMetadata, nil
 }

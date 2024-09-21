@@ -6,21 +6,23 @@ import (
 	"upload-service/service/images"
 
 	"github.com/gorilla/mux"
+	"github.com/minio/minio-go/v7"
 )
 
 type ApiServer struct {
-	addr string
+	addr        string
+	minioClient *minio.Client
 }
 
-func NewApiServer(addr string) *ApiServer {
-	return &ApiServer{addr: addr}
+func NewApiServer(addr string, minioClient *minio.Client) *ApiServer {
+	return &ApiServer{addr: addr, minioClient: minioClient}
 }
 
 func (s *ApiServer) Run() error {
 	router := mux.NewRouter()
 	subrouter := router.PathPrefix("/api/v1").Subrouter()
 
-	imageService := images.NewService()
+	imageService := images.NewService(s.minioClient)
 	imageHandler := images.NewHandler(imageService)
 	imageHandler.RegisterRoutes(subrouter)
 
