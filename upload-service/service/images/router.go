@@ -10,11 +10,12 @@ import (
 )
 
 type Handler struct {
-	service types.ImageUploadService
+	service              types.ImageUploadService
+	kafkaProducerService types.KafkaProducerService
 }
 
-func NewHandler(service types.ImageUploadService) *Handler {
-	return &Handler{service: service}
+func NewHandler(service types.ImageUploadService, kafkaProducerService types.KafkaProducerService) *Handler {
+	return &Handler{service: service, kafkaProducerService: kafkaProducerService}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"upload-service/service/images"
+	"upload-service/service/kafkaProducer"
 
 	"github.com/gorilla/mux"
 	"github.com/minio/minio-go/v7"
@@ -23,9 +24,12 @@ func (s *ApiServer) Run() error {
 	subrouter := router.PathPrefix("/api/v1").Subrouter()
 
 	imageService := images.NewService(s.minioClient)
-	imageHandler := images.NewHandler(imageService)
+	kafkaProducerService := kafkaProducer.NewKafkaProducerService()
+
+	imageHandler := images.NewHandler(imageService, kafkaProducerService)
 	imageHandler.RegisterRoutes(subrouter)
 
-	log.Println("Listening on", s.addr)
+	log.Println("Image upload service started on port ", s.addr)
+
 	return http.ListenAndServe(s.addr, router)
 }
