@@ -3,6 +3,7 @@ package images
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"path/filepath"
@@ -29,15 +30,16 @@ func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.Im
 		return types.ImageMetadata{}, err
 	}
 
-	imageMetadata := types.ImageMetadata{
-		Name:     fileName,
-		MimeType: h.Header.Get("Content-Type"),
-		Bytes:    fileBytes,
-	}
-
 	ctx := context.Background()
-	imageIOReader := bytes.NewReader(imageMetadata.Bytes)
+	imageIOReader := bytes.NewReader(fileBytes)
 	s.minioClient.PutObject(ctx, "image", h.Filename, imageIOReader, h.Size, minio.PutObjectOptions{})
+
+	locationUrl := fmt.Sprintf("http://localhost:9000/image/%s", h.Filename)
+	imageMetadata := types.ImageMetadata{
+		Name:        fileName,
+		MimeType:    h.Header.Get("Content-Type"),
+		LocationUrl: locationUrl,
+	}
 
 	return imageMetadata, nil
 }

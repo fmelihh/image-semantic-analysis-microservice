@@ -1,6 +1,10 @@
 package kafkaProducer
 
-import "github.com/IBM/sarama"
+import (
+	"fmt"
+
+	"github.com/IBM/sarama"
+)
 
 type Service struct {
 }
@@ -23,9 +27,22 @@ func (s *Service) ConnectProducer() (sarama.SyncProducer, error) {
 }
 
 func (s *Service) PushMessage(topic string, message []byte) error {
-	_, err := s.ConnectProducer()
+	producer, err := s.ConnectProducer()
 	if err != nil {
 		return err
 	}
+	defer producer.Close()
+
+	msg := &sarama.ProducerMessage{
+		Topic: topic,
+		Value: sarama.StringEncoder(message),
+	}
+
+	partition, offset, err := producer.SendMessage(msg)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d)\n", topic, partition, offset)
 	return nil
 }

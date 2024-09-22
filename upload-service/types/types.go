@@ -16,7 +16,7 @@ type KafkaProducerService interface {
 }
 
 type ImageMetadata struct {
-	Name     string
-	MimeType string
-	Bytes    []byte
+	Name        string
+	MimeType    string
+	LocationUrl string
 }

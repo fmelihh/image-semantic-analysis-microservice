@@ -1,6 +1,7 @@
 package images
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"upload-service/types"
@@ -37,5 +38,14 @@ func (h *Handler) handleImageUpload(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
-	utils.WriteJSON(w, http.StatusAccepted, imageMetadata)
+
+	imageMetadataBytes, err := json.Marshal(imageMetadata)
+	if err != nil {
+		fmt.Printf("Error converting image metadata object to bytes. Reason %s\n", err)
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.kafkaProducerService.PushMessage("image-upload", imageMetadataBytes)
+	utils.WriteJSON(w, http.StatusAccepted, map[string]string{"status": "success"})
 }
