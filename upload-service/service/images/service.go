@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/url"
 	"path/filepath"
 	"strings"
+	"time"
 	"upload-service/types"
 
 	"github.com/minio/minio-go/v7"
@@ -34,11 +36,17 @@ func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.Im
 	imageIOReader := bytes.NewReader(fileBytes)
 	s.minioClient.PutObject(ctx, "image", h.Filename, imageIOReader, h.Size, minio.PutObjectOptions{})
 
-	locationUrl := fmt.Sprintf("http://localhost:9000/image/%s", h.Filename)
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", fmt.Sprintf("attachment; filename=%s", h.Filename))
+	locationUrl, err := s.minioClient.PresignedGetObject(ctx, "image", h.Filename, time.Duration(1000)*time.Second, reqParams)
+	if err != nil {
+		return types.ImageMetadata{}, err
+	}
+
 	imageMetadata := types.ImageMetadata{
 		Name:        fileName,
 		MimeType:    h.Header.Get("Content-Type"),
-		LocationUrl: locationUrl,
+		LocationUrl: locationUrl.String(),
 	}
 
 	return imageMetadata, nil
