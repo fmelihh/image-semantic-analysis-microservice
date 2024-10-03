@@ -6,8 +6,11 @@ authors = ["Furkan Melih Ercan <furkanmelihercan.98@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-
+python = "^3.11.5"
+jupyter = "^1.1.1"
+jupyterlab = "^4.2.5"
+tensorflow = "^2.17.0"
+pillow = "^10.4.0"
 
 [build-system]
 requires = ["poetry-core"]
