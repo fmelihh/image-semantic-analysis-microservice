@@ -11,6 +11,8 @@ jupyter = "^1.1.1"
 jupyterlab = "^4.2.5"
 tensorflow = "^2.17.0"
 pillow = "^10.4.0"
+opencv-python = "^4.10.0.84"
+matplotlib = "^3.9.2"
 
 [build-system]
 requires = ["poetry-core"]
