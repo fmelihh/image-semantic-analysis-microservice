@@ -1481,6 +1481,23 @@ files = [
 ]
 
 [[package]]
+name = "kazoo"
+version = "2.5.0"
+description = "Higher Level Zookeeper Client"
+optional = false
+python-versions = "*"
+files = [
+    {file = "kazoo-2.5.0-py2.py3-none-any.whl", hash = "sha256:a5fa2e400c5068cfee9e86b35cf0dab8232b574152d8e3590d823b3e2426ab5e"},
+    {file = "kazoo-2.5.0.tar.gz", hash = "sha256:8db774f7bdece7d0dc7decb21539ff0852e42c2ffe1c28d7f1ff6f9292a1c3a4"},
+]
+
+[package.dependencies]
+six = "*"
+
+[package.extras]
+test = ["coverage", "flake8", "mock", "nose", "six"]
+
+[[package]]
 name = "keras"
 version = "3.6.0"
 description = "Multi-backend Keras."
@@ -2663,6 +2680,28 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pykafka"
+version = "2.8.0"
+description = "Full-Featured Pure-Python Kafka Client"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pykafka-2.8.0.tar.gz", hash = "sha256:f0bbd394ae6970042a587c99fe4dc0966e67787249d963d4ce2f810dc9490577"},
+]
+
+[package.dependencies]
+kazoo = "2.5.0"
+six = ">=1.5"
+tabulate = "*"
+
+[package.extras]
+all = ["gevent (==1.3)", "kazoo (==2.5.0)", "lz4 (==0.10.1)", "lz4 (==2.1.0)", "lz4tools (==1.3.1.2)", "lz4tools (==1.3.1.2)", "mock", "pytest (==3.8.1)", "pytest-cov", "python-snappy", "six (>=1.5)", "tabulate", "unittest2", "xxhash (==1.0.1)", "xxhash (==1.2.0)"]
+docs = ["lz4 (==2.1.0)", "lz4tools (==1.3.1.2)", "mock", "pytest (==3.8.1)", "pytest-cov", "python-snappy", "sphinx", "unittest2", "xxhash (==1.2.0)"]
+gevent = ["gevent (==1.3)"]
+lint = ["pep8", "pyflakes"]
+test = ["lz4 (==2.1.0)", "lz4tools (==1.3.1.2)", "mock", "pytest (==3.8.1)", "pytest-cov", "python-snappy", "unittest2", "xxhash (==1.2.0)"]
+
+[[package]]
 name = "pyparsing"
 version = "3.1.4"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -3223,6 +3262,20 @@ anyio = ">=3.4.0,<5"
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7)", "pyyaml"]
 
 [[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
+    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
+]
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "tensorboard"
 version = "2.17.1"
 description = "TensorBoard lets you watch Tensors Flow"
@@ -3679,4 +3732,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.5"
-content-hash = "b1caf0ce57255e7abb9fddeb72039504a8d047702a673767a42591d58fd58ba8"
+content-hash = "d16625988cdd3f367d11266ecb3a35b3ad4903bffed5b2b9b4358ab7a54fc2d4"
