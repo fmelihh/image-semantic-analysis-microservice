@@ -10,7 +10,7 @@ import (
 
 func NewFileStorage() (*minio.Client, error) {
 	minioClient, err := minio.New("localhost:9000", &minio.Options{
-		Creds:  credentials.NewStaticV4("CD3X6NS331R7PMWQ51RB", "AZm1+E+pGwWOf4fgRuX9tvSBkk+28uX+ceAKhLPu", ""),
+		Creds:  credentials.NewStaticV4("O23HM2KDTXYK3MOAZED1", "BXPUX+QvnDPkG+B5PsVd+gsjCVumUqJpbuQXSxDX", ""),
 		Secure: false,
 	})
 	if err != nil {
