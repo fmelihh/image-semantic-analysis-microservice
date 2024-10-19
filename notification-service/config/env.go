@@ -1,8 +1,10 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -17,12 +19,22 @@ type Config struct {
 var Envs = initConfig()
 
 func initConfig() Config {
-	godotenv.Load()
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	splittedPath := strings.Split(pwd, "/notification-service")
+	envPath := fmt.Sprintf("%s/%s", splittedPath[0], "notification-service/.env")
+	err = godotenv.Load(envPath)
+	if err != nil {
+		panic(err)
+	}
 	return Config{
-		SMTPHost:  getEnv("SMTP_Host", ""),
-		SMTPPort:  int(getEnvAsInt("SMTP_Port", 0)),
-		SMTPLogin: getEnv("SMTP_Login", ""),
-		SMTPToken: getEnv("SMTP_Token", ""),
+		SMTPHost:  getEnv("SMTP_HOST", ""),
+		SMTPPort:  int(getEnvAsInt("SMTP_PORT", 0)),
+		SMTPLogin: getEnv("SMTP_LOGIN", ""),
+		SMTPToken: getEnv("SMTP_TOKEN", ""),
 	}
 }
 

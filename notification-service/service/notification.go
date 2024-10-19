@@ -14,7 +14,7 @@ func NewNotificationService(smtpConfiguration types.SmtpConfigurations) *Notific
 	return &NotificationService{smtpConfiguration: smtpConfiguration}
 }
 
-func (s *NotificationService) Notify(consumerMessage map[string]any) error {
+func (s *NotificationService) Notify(consumerMessage map[string]any) (string, error) {
 	email := consumerMessage["email"].(string)
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", s.smtpConfiguration.Login)
@@ -24,7 +24,7 @@ func (s *NotificationService) Notify(consumerMessage map[string]any) error {
 
 	n := gomail.NewDialer(s.smtpConfiguration.Host, s.smtpConfiguration.Port, s.smtpConfiguration.Login, s.smtpConfiguration.AccessToken)
 	if err := n.DialAndSend(msg); err != nil {
-		return err
+		return email, err
 	}
-	return nil
+	return email, nil
 }

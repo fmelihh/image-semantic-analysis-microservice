@@ -8,7 +8,7 @@ type KafkaConsumer interface {
 }
 
 type NotificationService interface {
-	Notify(map[string]any) error
+	Notify(map[string]any) (string, error)
 }
 
 type SmtpConfigurations struct {

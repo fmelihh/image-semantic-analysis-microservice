@@ -37,6 +37,7 @@ func main() {
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	msgCount := 0
+	errorMsgCount := 0
 	doneCh := make(chan struct{})
 
 	go func() {
@@ -47,9 +48,17 @@ func main() {
 			case msg := <-consumer.Messages():
 				fmt.Printf("Received Message Count: %d: | Topic (%s) | Message(%s)\n", msgCount, string(msg.Topic), string(msg.Value))
 				convertedMessage := utils.ConvertBytesToMap(msg.Value)
-				notificationService.Notify(convertedMessage)
-				msgCount++
-				fmt.Printf("Message Notified. Total computed message: %d", msgCount)
+				notifiedEmail, err := notificationService.Notify(convertedMessage)
+				if err != nil {
+					errorMsgCount++
+					fmt.Printf("An error occurred. Details: %v \n", err.Error())
+				} else {
+					msgCount++
+					fmt.Printf("Message Notified to %s \n", notifiedEmail)
+				}
+
+				fmt.Printf("Total received messages %d, Total failed messages %d \n", msgCount, errorMsgCount)
+
 			case <-sigchan:
 				fmt.Println("Interrupted detected.")
 				doneCh <- struct{}{}
