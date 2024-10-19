@@ -10,3 +10,10 @@ type KafkaConsumer interface {
 type NotificationService interface {
 	Notify(map[string]any) error
 }
+
+type SmtpConfigurations struct {
+	Host        string
+	Port        int
+	Login       string
+	AccessToken string
+}
