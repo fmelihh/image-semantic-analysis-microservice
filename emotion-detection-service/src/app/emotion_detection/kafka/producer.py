@@ -2,6 +2,7 @@ import json
 from typing import Any
 from pykafka import KafkaClient
 
+
 class KafkaProducerClient:
     @staticmethod
     async def produce_kafka_messages(message: dict[str, Any]):

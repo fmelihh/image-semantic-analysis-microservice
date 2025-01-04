@@ -23,7 +23,7 @@ func NewService(minioClient *minio.Client) *Service {
 	return &Service{minioClient: minioClient}
 }
 
-func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.ImageMetadata, error) {
+func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader, email string) (types.ImageMetadata, error) {
 	defer f.Close()
 
 	fileName := strings.TrimSuffix(h.Filename, filepath.Ext(h.Filename))
@@ -47,6 +47,7 @@ func (s *Service) SaveImage(f multipart.File, h *multipart.FileHeader) (types.Im
 		Name:        fileName,
 		MimeType:    h.Header.Get("Content-Type"),
 		LocationUrl: locationUrl.String(),
+		Email:       email,
 	}
 
 	return imageMetadata, nil

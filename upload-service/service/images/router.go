@@ -25,6 +25,13 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 
 func (h *Handler) handleImageUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(200 << 20)
+
+	email := r.FormValue("email")
+	if email == "" {
+		fmt.Printf("Error missing email in form data.")
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing email in form data."))
+	}
+
 	f, header, err := r.FormFile("image")
 	if err != nil {
 		fmt.Printf("Error reading file of 'image' form data. Reason %s\n", err)
@@ -32,7 +39,7 @@ func (h *Handler) handleImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	imageMetadata, err := h.service.SaveImage(f, header)
+	imageMetadata, err := h.service.SaveImage(f, header, email)
 	if err != nil {
 		fmt.Printf("Error saving file to minio is not successfully completed. Reason %s\n", err)
 		utils.WriteError(w, http.StatusInternalServerError, err)

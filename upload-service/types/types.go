@@ -7,7 +7,7 @@ import (
 )
 
 type ImageUploadService interface {
-	SaveImage(multipart.File, *multipart.FileHeader) (ImageMetadata, error)
+	SaveImage(multipart.File, *multipart.FileHeader, string) (ImageMetadata, error)
 }
 
 type KafkaProducerService interface {
@@ -19,4 +19,5 @@ type ImageMetadata struct {
 	Name        string
 	MimeType    string
 	LocationUrl string
+	Email       string
 }

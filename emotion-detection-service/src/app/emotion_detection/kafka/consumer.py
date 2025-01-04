@@ -24,6 +24,7 @@ class KafkaConsumerClient:
                         image_name=message_value["Name"],
                         mime_type=message_value["Name"],
                         image_url=message_value["LocationUrl"],
+                        email=message_value["Email"],
                     )
         except Exception as e:
             print(f"Error {e}")

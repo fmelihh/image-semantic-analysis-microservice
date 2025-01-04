@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	consumer, err := kafkaConsumer.SubscribeTopic(conn, "notification")
+	consumer, err := kafkaConsumer.SubscribeTopic(conn, "emotion-response")
 
 	if err != nil {
 		panic(err)

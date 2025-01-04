@@ -44,7 +44,7 @@ class EmotionService:
 
         return self._emotion_model
 
-    async def predict(self, image_name: str, mime_type: str, image_url: str):
+    async def predict(self, image_name: str, mime_type: str, image_url: str, email: str):
         print("message received from upload service", image_name, mime_type)
         response = requests.get(image_url)
         if response.status_code != 200:
@@ -55,15 +55,17 @@ class EmotionService:
         img = cv2.resize(img, (600, 600))
         img = cv2.convertScaleAbs(img, beta=50)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = self.face_cascade.detectMultiScale(gray_img, scaleFactor=1.3, minNeighbors=5)
+        faces = self.face_cascade.detectMultiScale(
+            gray_img, scaleFactor=1.3, minNeighbors=5
+        )
         if len(faces) == 0:
             print("No face detected!")
             return
 
         (x, y, w, h) = faces[0]
-        face_img = gray_img[y: y + h, x:x + w]
+        face_img = gray_img[y : y + h, x : x + w]
         resized_img = cv2.resize(face_img, (48, 48))
-        img_pixels = resized_img.astype('float32') / 255.0
+        img_pixels = resized_img.astype("float32") / 255.0
         img_pixels = np.expand_dims(img_pixels, axis=-1)
         img_pixels = np.expand_dims(img_pixels, axis=0)
         predictions = self.emotion_model.predict(img_pixels)
@@ -74,7 +76,8 @@ class EmotionService:
             "MimeType": mime_type,
             "ImageName": image_name,
             "Emotion": predicted_emotion,
-            "AvailableEmotions": ','.join(list(self.emotion_dict.values())),
+            "AvailableEmotions": ",".join(list(self.emotion_dict.values())),
+            "Email": email
         }
         print("Predicted emotion is", predicted_emotion)
         await KafkaProducerClient.produce_kafka_messages(message_body)
