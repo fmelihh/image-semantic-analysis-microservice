@@ -22,7 +22,7 @@ func (s *NotificationService) Notify(consumerMessage map[string]any) (string, er
 	msg.SetHeader("To", email)
 	msg.SetHeader("Subject", "Emotion Detection Result")
 
-	msgBody := fmt.Sprintf("Emotion: %s, ImageUrl: %s", consumerMessage["Emotion"], consumerMessage["ImageUrl"])
+	msgBody := fmt.Sprintf("Emotion: %s, ImageUrl: %s", consumerMessage["Emotion"], consumerMessage["ImageURL"])
 	msg.SetBody("text/plain", msgBody)
 
 	n := gomail.NewDialer(s.smtpConfiguration.Host, s.smtpConfiguration.Port, s.smtpConfiguration.Login, s.smtpConfiguration.AccessToken)
